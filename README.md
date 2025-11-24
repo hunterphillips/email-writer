@@ -163,7 +163,6 @@ Step 2/3: Starting fine-tuning job...
 Step 3/3: Monitoring job progress...
 
 This may take 20-60 minutes depending on dataset size.
-You can safely close this script and check status later.
 
 [18:30:15] Status: validating_files
 [18:30:45] Status: running
