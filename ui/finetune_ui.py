@@ -44,9 +44,17 @@ def render():
     with col2:
         st.metric("Validation Examples", val_count)
     with col3:
-        st.metric("Base Model", "-".join(FINETUNING_BASE_MODEL.split("-")[:3]))
+        st.metric("Default Model", "-".join(FINETUNING_BASE_MODEL.split("-")[:3]))
 
     st.markdown("---")
+
+    # Model name suffix
+    model_suffix = st.text_input(
+        "Model Name Suffix",
+        value=FINE_TUNING_SUFFIX,
+        max_chars=40,
+        help="Custom suffix for your fine-tuned model name. Only letters, numbers, hyphens, and underscores allowed."
+    )
 
     # Initialize session state and load any existing job
     if 'finetuning_job_id' not in st.session_state:
@@ -65,7 +73,24 @@ def render():
 
     # Advanced settings (collapsed by default)
     with st.expander("⚙️ Advanced Settings", expanded=False):
-        st.markdown("Adjust fine-tuning hyperparameters. Leave as 'auto' for OpenAI's recommended values.")
+        st.markdown("Customize base model and hyperparameters. Defaults work well for most users.")
+
+        # Base model selection
+        base_model = st.selectbox(
+            "Base Model",
+            options=[
+                "gpt-4o-mini-2024-07-18",
+                "gpt-4o-2024-08-06",
+                "gpt-4.1-nano-2025-04-14",
+                "gpt-4.1-mini-2025-04-14",
+                "gpt-4.1-2025-04-14"
+            ],
+            index=0,
+            help="Model to fine-tune. gpt-4o-mini is recommended (fast, cheap, good quality). gpt-4o is slower but higher quality. GPT-4.1 models are newest."
+        )
+
+        st.markdown("---")
+        st.markdown("**Hyperparameters**")
 
         col1, col2, col3 = st.columns(3)
 
@@ -124,8 +149,8 @@ def render():
                         client,
                         training_file_id,
                         validation_file_id,
-                        base_model=FINETUNING_BASE_MODEL,
-                        suffix=FINE_TUNING_SUFFIX,
+                        base_model=base_model,
+                        suffix=model_suffix,
                         hyperparameters=hyperparameters
                     )
                     st.session_state.finetuning_job_id = job_id

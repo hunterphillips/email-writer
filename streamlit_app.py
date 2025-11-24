@@ -21,7 +21,7 @@ load_dotenv()
 # Page configuration
 st.set_page_config(
     page_title="Email Writer",
-    page_icon="📧",
+    page_icon="✨",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -33,7 +33,7 @@ apply_custom_css()
 def main():
     """Main app entry point."""
     # Header
-    st.markdown('<div class="main-header">📧 Email Writer</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">✨ Email Writer</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">Fine-tune AI models to write emails in your personal style</div>', unsafe_allow_html=True)
 
     # API Key Configuration
