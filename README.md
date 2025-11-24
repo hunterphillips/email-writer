@@ -35,13 +35,36 @@ cd email-writer
 
 # Install dependencies
 pip install -r requirements.txt
-
-# Set up your API key
-cp .env.example .env
-# Edit .env and add your OpenAI API key
 ```
 
 ## Usage
+
+### Option 1: Web UI (Recommended)
+
+Launch the web interface:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+Your browser should open a new tab at `http://localhost:8501`.
+
+**Features:**
+
+- Drag-and-drop file upload
+- Real-time progress monitoring
+- Interactive model testing
+- Side-by-side comparison with base model
+- No command-line knowledge required
+
+### Option 2: CLI
+
+First, set up your API key:
+
+```bash
+cp .env.example .env
+# Edit .env and add your OPENAI_API_KEY
+```
 
 ### Quick Start (3 Commands)
 
@@ -230,9 +253,10 @@ email-writer/
 ├── .env.example             # API key template
 ├── requirements.txt         # Python dependencies
 │
-├── prepare_data.py          # Step 1: Data preparation
-├── finetune.py             # Step 2: Fine-tuning
-├── test_model.py           # Step 3: Testing
+├── streamlit_app.py         # Web UI (recommended)
+├── prepare_data.py          # Step 1: Data preparation (CLI)
+├── finetune.py             # Step 2: Fine-tuning (CLI)
+├── test_model.py           # Step 3: Testing (CLI)
 │
 ├── lib/                     # Shared library code
 │   ├── config.py           # Configuration settings
