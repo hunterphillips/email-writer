@@ -12,6 +12,7 @@ from lib.config import (
     TRAINING_FILE,
     VALIDATION_FILE,
     MODEL_INFO_FILE,
+    CURRENT_JOB_FILE,
     FINETUNING_BASE_MODEL,
     FINE_TUNING_SUFFIX,
     FINE_TUNING_HYPERPARAMETERS
@@ -43,15 +44,67 @@ def render():
     with col2:
         st.metric("Validation Examples", val_count)
     with col3:
-        st.metric("Base Model", FINETUNING_BASE_MODEL.split('-')[0])
+        st.metric("Base Model", "-".join(FINETUNING_BASE_MODEL.split("-")[:3]))
 
     st.markdown("---")
 
-    # Initialize session state
+    # Initialize session state and load any existing job
     if 'finetuning_job_id' not in st.session_state:
-        st.session_state.finetuning_job_id = None
+        # Check if there's a current job file from a previous session
+        if Path(CURRENT_JOB_FILE).exists():
+            try:
+                with open(CURRENT_JOB_FILE, 'r') as f:
+                    job_data = json.load(f)
+                    st.session_state.finetuning_job_id = job_data.get('job_id')
+            except:
+                st.session_state.finetuning_job_id = None
+        else:
+            st.session_state.finetuning_job_id = None
     if 'finetuning_status' not in st.session_state:
         st.session_state.finetuning_status = None
+
+    # Advanced settings (collapsed by default)
+    with st.expander("⚙️ Advanced Settings", expanded=False):
+        st.markdown("Adjust fine-tuning hyperparameters. Leave as 'auto' for OpenAI's recommended values.")
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            n_epochs = st.selectbox(
+                "Epochs",
+                options=["auto", "1", "2", "3", "4", "5", "10", "20"],
+                index=0,
+                help="Number of training epochs. 'auto' lets OpenAI determine the optimal value (recommended)."
+            )
+
+        with col2:
+            learning_rate = st.selectbox(
+                "Learning Rate Multiplier",
+                options=["auto", "0.02", "0.05", "0.1", "0.2", "0.5", "1.0", "2.0"],
+                index=0,
+                help="Multiplier for the learning rate. 'auto' uses OpenAI's defaults."
+            )
+
+        with col3:
+            batch_size = st.selectbox(
+                "Batch Size",
+                options=["auto", "1", "2", "4", "8", "16"],
+                index=0,
+                help="Batch size for training. 'auto' lets OpenAI choose based on dataset size."
+            )
+
+    # Build hyperparameters dictionary from user selections
+    hyperparameters = {}
+    if n_epochs != "auto":
+        hyperparameters["n_epochs"] = int(n_epochs)
+    else:
+        hyperparameters["n_epochs"] = "auto"
+
+    if learning_rate != "auto":
+        hyperparameters["learning_rate_multiplier"] = float(learning_rate)
+
+    if batch_size != "auto":
+        hyperparameters["batch_size"] = int(batch_size)
 
     # Start fine-tuning button
     if not st.session_state.finetuning_job_id:
@@ -73,9 +126,14 @@ def render():
                         validation_file_id,
                         base_model=FINETUNING_BASE_MODEL,
                         suffix=FINE_TUNING_SUFFIX,
-                        hyperparameters=FINE_TUNING_HYPERPARAMETERS
+                        hyperparameters=hyperparameters
                     )
                     st.session_state.finetuning_job_id = job_id
+
+                    # Save job ID to file for persistence across page refreshes
+                    with open(CURRENT_JOB_FILE, 'w') as f:
+                        json.dump({'job_id': job_id}, f)
+
                     st.success(f"✓ Fine-tuning job created: {job_id}")
                     st.rerun()
 
@@ -132,6 +190,10 @@ def render():
                 st.success(f"Model info saved to {MODEL_INFO_FILE}")
                 st.info("Go to the 'Test Model' tab to try your fine-tuned model!")
 
+                # Clean up job tracking file
+                if Path(CURRENT_JOB_FILE).exists():
+                    Path(CURRENT_JOB_FILE).unlink()
+
                 # Reset session state
                 if st.button("Reset (start new fine-tuning)"):
                     st.session_state.finetuning_job_id = None
@@ -143,6 +205,10 @@ def render():
                 if job.error:
                     st.error(f"Error: {job.error}")
 
+                # Clean up job tracking file
+                if Path(CURRENT_JOB_FILE).exists():
+                    Path(CURRENT_JOB_FILE).unlink()
+
                 if st.button("Reset"):
                     st.session_state.finetuning_job_id = None
                     st.session_state.finetuning_status = None
@@ -150,6 +216,10 @@ def render():
 
             elif status == "cancelled":
                 st.warning("⚠️ Fine-tuning was cancelled")
+
+                # Clean up job tracking file
+                if Path(CURRENT_JOB_FILE).exists():
+                    Path(CURRENT_JOB_FILE).unlink()
 
                 if st.button("Reset"):
                     st.session_state.finetuning_job_id = None

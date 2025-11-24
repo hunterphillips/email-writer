@@ -10,6 +10,7 @@ PROMPT_ENHANCEMENT_BATCH_SIZE = 10  # Number of prompts to process per API call
 # Data preparation settings
 VALIDATION_SPLIT_RATIO = 0.1  # 10% of data for validation
 MIN_TRAINING_EXAMPLES = 10  # Minimum examples required by OpenAI
+MAX_TRAINING_EXAMPLES = 10000  # Cap to limit training time  
 
 # Email filtering settings
 GENERIC_PROMPTS = {
@@ -22,6 +23,7 @@ GENERIC_PROMPTS = {
 TRAINING_FILE = "training.jsonl"
 VALIDATION_FILE = "validation.jsonl"
 MODEL_INFO_FILE = "model_info.json"
+CURRENT_JOB_FILE = "current_finetuning_job.json"
 
 # Fine-tuning parameters
 FINE_TUNING_SUFFIX = "email-writer"  # Suffix for the fine-tuned model name

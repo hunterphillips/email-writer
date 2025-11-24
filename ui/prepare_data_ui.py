@@ -9,7 +9,7 @@ import streamlit as st
 
 from lib.email_cleaner import process_mbox
 from lib.prompt_enhancer import enhance_generic_prompts
-from lib.config import TRAINING_FILE, VALIDATION_FILE, MIN_TRAINING_EXAMPLES
+from lib.config import TRAINING_FILE, VALIDATION_FILE, MIN_TRAINING_EXAMPLES, MAX_TRAINING_EXAMPLES
 
 from .shared import estimate_cost, split_dataset, write_jsonl, get_openai_client
 
@@ -62,6 +62,12 @@ def render():
                     st.error(f"Only {len(dataset)} examples found. OpenAI requires at least {MIN_TRAINING_EXAMPLES} examples.")
                     temp_path.unlink()
                     st.stop()
+
+                # Cap dataset size to limit excessive training time 
+                if len(dataset) > MAX_TRAINING_EXAMPLES:
+                    st.warning(f"⚠️ Dataset contains {len(dataset)} examples. Limiting to {MAX_TRAINING_EXAMPLES} to limit training time.")
+                    dataset = dataset[:MAX_TRAINING_EXAMPLES]
+                    st.info(f"Using {len(dataset)} examples for training (this is plenty for high-quality results)")
 
                 # Step 2: Enhance generic prompts
                 st.info("Step 2/4: Enhancing generic prompts...")

@@ -23,6 +23,7 @@ from lib.config import (
     VALIDATION_FILE,
     VALIDATION_SPLIT_RATIO,
     MIN_TRAINING_EXAMPLES,
+    MAX_TRAINING_EXAMPLES,
     COST_PER_1K_TOKENS
 )
 
@@ -146,6 +147,13 @@ def main():
         print(f"   OpenAI requires at least {MIN_TRAINING_EXAMPLES} examples for fine-tuning.")
         print("   Consider exporting more emails or using a different mailbox.")
         sys.exit(1)
+
+    # Cap dataset size to limit training time
+    if len(dataset) > MAX_TRAINING_EXAMPLES:
+        print(f"⚠️  Dataset contains {len(dataset)} examples. Limiting to {MAX_TRAINING_EXAMPLES} to limit training time.")
+        dataset = dataset[:MAX_TRAINING_EXAMPLES]
+        print(f"  ✓ Using {len(dataset)} examples for training (this is plenty for high-quality results)")
+        print()
 
     # Step 2: Enhance generic prompts
     print("Step 2/4: Enhancing generic prompts...")

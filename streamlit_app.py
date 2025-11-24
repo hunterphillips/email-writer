@@ -57,8 +57,10 @@ def main():
                 help="Get your API key from https://platform.openai.com/api-keys"
             )
 
-            if st.button("Save API Key", type="primary", disabled=not api_key_input):
-                if api_key_input.startswith("sk-"):
+            if st.button("Save API Key", type="primary"):
+                if not api_key_input:
+                    st.error("Please enter an API key")
+                elif api_key_input.startswith("sk-"):
                     st.session_state.openai_api_key = api_key_input
                     st.success("✅ API key saved! The page will refresh.")
                     st.rerun()

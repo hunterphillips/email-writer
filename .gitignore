@@ -5,6 +5,7 @@
 *.jsonl
 *.mbox
 model_info.json
+current_finetuning_job.json
 
 # Python
 __pycache__/
