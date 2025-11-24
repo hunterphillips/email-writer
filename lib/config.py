@@ -33,7 +33,7 @@ FINE_TUNING_HYPERPARAMETERS = {
 
 # Cost estimates (approximate, as of 2024)
 COST_PER_1K_TOKENS = {
-    "training": 0.0080,  # $0.0080 per 1K tokens for gpt-4o-mini-2024-07-18
+    "training": 0.0070,  # $0.0070 per 1K tokens for gpt-4o-mini-2024-07-18
     "validation": 0.0080,
     "prompt_enhancement": 0.000150,  # Input cost for gpt-4o-mini
     "prompt_enhancement_output": 0.000600,  # Output cost for gpt-4o-mini
