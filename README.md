@@ -2,6 +2,8 @@
 
 A simple tool for fine-tuning OpenAI models to write emails in your personal style & tone.
 
+![Example screenshot](screenshots/model-comparison.png)
+
 ## Overview
 
 The following describes a basic fine-tuning workflow:
@@ -80,6 +82,8 @@ python test_model.py
 ```
 
 ### Step 1: Prepare Data
+
+![Data Preparation](screenshots/data-preparation.png)
 
 Converts your Gmail .mbox file into formatted training data.
 
@@ -232,18 +236,17 @@ Comparison: Fine-Tuned vs Base Model
 
 ## Cost Estimates
 
-Typical costs for fine-tuning (as of 2024):
+Actual costs for fine-tuning with gpt-4o-mini (as of 2025):
 
-- **50 emails**: ~$0.20 - $0.50
-- **100 emails**: ~$0.50 - $1.00
-- **200 emails**: ~$1.00 - $2.00
-- **500 emails**: ~$2.00 - $5.00
+- **500 emails**: ~$0.87
 
 **Breakdown:**
 
-- Prompt enhancement: ~$0.001 per email
-- Fine-tuning: ~$0.008 per 1K tokens (gpt-4o-mini)
-- Using the model: Same as base gpt-4o-mini rates
+- Data preparation + prompt enhancement: ~$0.001-0.002 per email
+- Fine-tuning: ~$0.008 per 1K tokens (gpt-4o-mini-2024-07-18)
+- Using the model: Same as base gpt-4o-mini rates (~$0.15/1M input tokens, ~$0.60/1M output tokens)
+
+**Note:** Costs scale roughly linearly with email count.
 
 ## Project Structure
 
