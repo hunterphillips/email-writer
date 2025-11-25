@@ -1,4 +1,4 @@
-# Email Writer
+# ✨ Email Writer
 
 A simple tool for fine-tuning OpenAI models to write emails in your personal style & tone.
 
