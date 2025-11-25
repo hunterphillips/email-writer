@@ -51,14 +51,6 @@ streamlit run streamlit_app.py
 
 Your browser should open a new tab at `http://localhost:####`.
 
-**Features:**
-
-- Drag-and-drop file upload
-- Real-time progress monitoring
-- Interactive model testing
-- Side-by-side comparison with base model
-- No command-line knowledge required
-
 ### Option 2: CLI
 
 First, set up your API key:
@@ -68,7 +60,7 @@ cp .env.example .env
 # Edit .env and add your OPENAI_API_KEY
 ```
 
-### Quick Start (3 Commands)
+### Quick Start
 
 ```bash
 # Step 1: Prepare training data
@@ -146,7 +138,7 @@ python finetune.py
 **What it does:**
 
 - Uploads training and validation files to OpenAI
-- Creates fine-tuning job with gpt-4o-mini
+- Creates fine-tuning job with selected base model (default - gpt-4o-mini)
 - Monitors progress until completion
 - Saves model ID to `model_info.json`
 
@@ -245,17 +237,15 @@ Actual costs for fine-tuning with gpt-4o-mini (as of 2025):
 - Fine-tuning: ~$0.008 per 1K tokens (gpt-4o-mini-2024-07-18)
 - Using the model: Same as base gpt-4o-mini rates (~$0.15/1M input tokens, ~$0.60/1M output tokens)
 
-**Note:** Costs scale roughly linearly with email count.
-
 ## Project Structure
 
 ```
 email-writer/
-├── README.md                 # This file
-├── .env.example             # API key template
+├── README.md                 
+├── .env.example             
 ├── requirements.txt         # Python dependencies
 │
-├── streamlit_app.py         # Web UI (recommended)
+├── streamlit_app.py         # Web UI 
 ├── prepare_data.py          # Step 1: Data preparation (CLI)
 ├── finetune.py             # Step 2: Fine-tuning (CLI)
 ├── test_model.py           # Step 3: Testing (CLI)
@@ -263,7 +253,7 @@ email-writer/
 ├── lib/                     # Shared library code
 │   ├── config.py           # Configuration settings
 │   ├── email_cleaner.py    # Email extraction & cleaning
-│   └── prompt_enhancer.py  # AI-powered prompt improvement
+│   └── prompt_enhancer.py  # Instruction prompt generation (for emails that aren't repyling to anything)
 │
 └── examples/
     └── sample_output.jsonl # Example training data format
@@ -290,20 +280,15 @@ The tool removes:
 - Auto-generated messages
 - Meeting invite details
 - Email headers
-- URLs-only emails
 - Confirmation/tracking emails
 - Image-only messages
 
 ### Prompt Enhancement
 
-Generic prompts like "Write an email in your tone" are automatically enhanced:
-
 ```
 Before: "Write an email in your tone."
 After:  "Write a brief email asking about project timeline."
 ```
-
-This uses OpenAI's API with **batched requests** (10 emails per call) for efficiency.
 
 ### Training Data Format
 
@@ -331,9 +316,6 @@ A: Minimum 10, but 50-100+ recommended for better results.
 
 **Q: What if I have multiple email accounts?**
 A: Export and process each .mbox separately, or combine them manually.
-
-**Q: Can I fine-tune multiple times?**
-A: Yes! You can even fine-tune an already fine-tuned model.
 
 **Q: How do I delete my fine-tuned model?**
 A: Go to [OpenAI Fine-tuning Dashboard](https://platform.openai.com/finetune) and delete it there.
