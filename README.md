@@ -6,12 +6,12 @@ A simple tool for fine-tuning OpenAI models to write emails in your personal sty
 
 ## Overview
 
-The following describes a basic fine-tuning workflow:
+The following describes a basic fine-tuning workflow for writing emails:
 
 1. **Extract & Clean**: Process Gmail .mbox exports into clean training data
-2. **Enhance**: Automatically improve generic prompts using AI
-3. **Fine-Tune**: Create a personalized email writing model via OpenAI
-4. **Test**: Try out your custom model interactively
+2. **Enhance**: Fill in prompts for emails without a 'Reply to' example using synthetic prompt generation
+3. **Fine-Tune**: Create a fine-tuning job via OpenAI API `post https://api.openai.com/v1/fine_tuning/jobs`
+4. **Test**: Compare your custom model to the base model
 
 ## Prerequisites
 
