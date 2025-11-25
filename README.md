@@ -49,7 +49,7 @@ Launch the web interface:
 streamlit run streamlit_app.py
 ```
 
-Your browser should open a new tab at `http://localhost:8501`.
+Your browser should open a new tab at `http://localhost:####`.
 
 **Features:**
 
